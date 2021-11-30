@@ -1,6 +1,7 @@
 package java.kitchenapp;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
 
@@ -18,12 +20,19 @@ import java.util.ArrayList;
 public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapter.MyViewHolder> {
 
     Context context;
-    ArrayList<Order> orders;
+    //private SortedList<Order> orders;
 
-    OrdersCustomAdapter(Context context, ArrayList<Order> orders) {
+    OrdersCustomAdapter(Context context) {
         this.context = context;
-        this.orders = orders;
     }
+
+//    public void addAll(ArrayList<Order> orders) {
+//        this.orders.addAll(orders);
+//    }
+//
+//    public int add(Order order) {
+//        return this.orders.add(order);
+//    }
 
     @NonNull
     @Override
@@ -35,28 +44,50 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
 
     @Override
     public void onBindViewHolder(@NonNull OrdersCustomAdapter.MyViewHolder holder, int position) {
-        holder.tableNumber.setText(String.valueOf(orders.get(position).getTableNumber()));
-        holder.name.setText(String.valueOf(orders.get(position).getName()));
-        holder.time.setText(String.valueOf(orders.get(position).getTime()));
-        //holder.finished_status??
+        Order order = SO.s.orders.get(position);
+        holder.tableNumber.setText(String.valueOf(order.getTableNumber()));
+        holder.name.setText(String.valueOf(order.getName()));
+        holder.time.setText(String.valueOf(order.getTime()));
+        holder.order = order;
     }
 
     @Override
     public int getItemCount() {
-        return orders.size();
+        return SO.s.orders.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView tableNumber, name, time;
         Button finished_status;
+        Order order;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tableNumber = itemView.findViewById(R.id.tableNumber);
             name = itemView.findViewById(R.id.name);
             time = itemView.findViewById(R.id.time);
+            //finished_status = itemView.findViewById(R.id.finished_status);
+
             finished_status = itemView.findViewById(R.id.finished_status);
+
+            finished_status.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("demo", "clicked " + getAdapterPosition() + " aka " + order.getTableNumber());
+                    Log.d("demo", "duplicate");
+                    // create new identical order
+
+                }
+            });
         }
     }
 }
+
+
+
+
+
+
+
+

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class Order {
 
+    //public static ArrayList<Order> orders;
+
     public static ArrayList<Order> populateOrders() {
         ArrayList<Order> orders = new ArrayList<Order>();
 
