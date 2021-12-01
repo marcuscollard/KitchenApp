@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.os.Handler;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        XmlReaderTask xmlReaderTask = new XmlReaderTask();
+        xmlReaderTask.tableList = null;
+        xmlReaderTask.handler = new Handler();//Håller  koll på trådsom är ansvar för  nätverk
+        xmlReaderTask.execute();
+
         RecyclerView recycler = findViewById(R.id.recycler);
 
         //orders = Order.populateOrders();
@@ -36,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         recycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
         SO.s.orders.add(new Order(1, "", 0));
+
 
 //        Handler handler = new Handler();
 //        handler.postDelayed(new Runnable() {
