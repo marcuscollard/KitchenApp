@@ -1,13 +1,17 @@
 package java.kitchenapp;
 
+import android.content.Context;
+
 import androidx.recyclerview.widget.SortedList;
+
+import java.util.ArrayList;
 
 public class SO {
 
     // singleton class for orders
     public static SO s = new SO();
 
-
+    OrdersCustomAdapter customAdapter;
 
     public final SortedList<Order> orders = new SortedList<>(Order.class, new SortedList.Callback<Order>() {
         @Override
@@ -27,7 +31,7 @@ public class SO {
             if (o1.getTableNumber() > o2.getTableNumber()) { return 1; }
             else if (o1.getTableNumber() < o2.getTableNumber()) { return -1; }
             else {
-                return Integer.compare(o1.getTime(), o2.getTime());
+                return Integer.compare(o2.getTime(), o1.getTime());
             }
         }
         @Override
@@ -44,10 +48,16 @@ public class SO {
         }
     });
 
-    void addOrder(Order order) {
-        orders.add(order);
+    public void addOrders(ArrayList<Order> o) {
+        orders.addAll(o);
+        customAdapter.notifyDataSetChanged();
+        //customAdapter.notifyItemRangeChanged();
+        //customAdapter.upDateData(orders);
+    }
 
-        //notifyItemInserted();
+    public void addOrder() {
+        //orders.addAll(orders);
+        customAdapter.notifyDataSetChanged();
     }
 
 //    SortedList<Order> deleteOrder() {
