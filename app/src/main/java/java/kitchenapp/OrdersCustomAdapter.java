@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SortedList;
+//import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
 
@@ -33,6 +33,13 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
 //    public int add(Order order) {
 //        return this.orders.add(order);
 //    }
+
+    //  add function `UpDateData` here and call `NotifyDataSetChanged`
+    public void upDateData(ArrayList<Order> orders) {
+        SO.s.orders.addAll(orders);
+        //notifyDataSetChanged();
+        notifyItemRangeInserted(SO.s.orders.size()-orders.size(), SO.s.orders.size());
+    }
 
     @NonNull
     @Override
@@ -76,8 +83,17 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
                 public void onClick(View v) {
                     Log.d("demo", "clicked " + getAdapterPosition() + " aka " + order.getTableNumber());
                     Log.d("demo", "duplicate");
-                    // create new identical order
 
+                    Order temp = SO.s.orders.get(getAdapterPosition());
+                    temp.setTime(temp.getTime()+1);
+
+                    SO.s.addOrders(new ArrayList<Order>());
+
+                            //get(getAdapterPosition()).setTime(order.getTime()+1);
+                    // create new identical order
+                    //ArrayList<Order> orders = new ArrayList<Order>();
+                    //orders.add(order);
+                    //SO.s.addOrders(orders);
                 }
             });
         }
