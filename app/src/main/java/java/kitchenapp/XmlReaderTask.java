@@ -15,12 +15,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
-public class XmlReaderTask extends AsyncTask<Void, Void, TableList> {
+public class XmlReaderTask extends AsyncTask<Void, Void, MenuItems> {
     Order order;
-    TableList tableList = new TableList();
+    Order order2;
+    MenuItems tableList = new MenuItems();
     //String responseText;
     Handler handler;
-    protected TableList doInBackground(Void... voids) {
+    protected MenuItems doInBackground(Void... voids) {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         //logging.level(HttpLoggingInterceptor.Level.BODY);   // set your desired log level
@@ -28,16 +29,16 @@ public class XmlReaderTask extends AsyncTask<Void, Void, TableList> {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);  // <-- this is the important line!
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/AntonsOrder/webresources/")//http://10.0.2.2:8080/WebbTest2/webresources/    http://localhost:8080/WebbTest2/webresources/se.miun.register
+        Retrofit retrofit = new Retrofit.Builder()//http://localhost:8080/Anton2/webresources/se.miun.entities.menuitem
+                .baseUrl("http://10.0.2.2:8080/Anton2/webresources/")//http://10.0.2.2:8080/WebbTest2/webresources/    http://localhost:8080/WebbTest2/webresources/se.miun.register
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .client(httpClient.build())
                 .build();
-        NameService service = retrofit.create(NameService.class);
-        Call<TableList> listName = service.listNames();
+        RestMenuItem service = retrofit.create(RestMenuItem.class);
+        Call<MenuItems> listName = service.listNames();
         try {
 
-            Response<TableList> result = listName.execute();
+            Response<MenuItems> result = listName.execute();
             tableList = result.body();
 
             //responseText = tableList.bordorder.get(0).foodname;
@@ -48,13 +49,16 @@ public class XmlReaderTask extends AsyncTask<Void, Void, TableList> {
         return tableList;
 
     }
-    protected void onPostExecute(TableList result) {
+    protected void onPostExecute(MenuItems result) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                order = new Order(result.bordorder.get(0).tablenr,
-                    result.bordorder.get(0).foodname, result.bordorder.get(0).bordpriority);
+                order = new Order(result.menuItemList.get(0).id,
+                    result.menuItemList.get(0).foodName, result.menuItemList.get(0).price);
                 SO.s.orders.add(order);
+                order2 = new Order(result.menuItemList.get(1).id,
+                        result.menuItemList.get(1).foodName, result.menuItemList.get(1).price);
+                SO.s.orders.add(order2);
             }
         });
 

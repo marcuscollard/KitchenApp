@@ -8,7 +8,6 @@ public class SO {
     public static SO s = new SO();
 
 
-
     public final SortedList<Order> orders = new SortedList<>(Order.class, new SortedList.Callback<Order>() {
         @Override
         public void onInserted(int position, int count) {
