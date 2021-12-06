@@ -1,7 +1,6 @@
 package java.kitchenapp;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapter.MyViewHolder> {
 
     Context context;
-    //private SortedList<Order> orders;
 
     OrdersCustomAdapter(Context context) {
         this.context = context;
@@ -52,9 +50,10 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
     @Override
     public void onBindViewHolder(@NonNull OrdersCustomAdapter.MyViewHolder holder, int position) {
         Order order = SO.s.orders.get(position);
-        holder.tableNumber.setText(String.valueOf(order.getTableNumber()));
+        holder.tableNumber.setText(String.valueOf(order.getTablePrio()));
         holder.name.setText(String.valueOf(order.getName()));
         holder.time.setText(String.valueOf(order.getTime()));
+        holder.finished_status.setText(holder.BUTTON_NOT_DONE_TEXT);
         holder.order = order;
     }
 
@@ -65,11 +64,17 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        // constants
+        final String BUTTON_DONE_TEXT = "\u2713 done";
+        final String BUTTON_NOT_DONE_TEXT = "not done";
+
+        // internal variables
         TextView tableNumber, name, time;
         Button finished_status;
         Order order;
 
         public MyViewHolder(@NonNull View itemView) {
+
             super(itemView);
             tableNumber = itemView.findViewById(R.id.tableNumber);
             name = itemView.findViewById(R.id.name);
@@ -81,15 +86,19 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
             finished_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("demo", "clicked " + getAdapterPosition() + " aka " + order.getTableNumber());
-                    Log.d("demo", "duplicate");
 
-                    Order temp = SO.s.orders.get(getAdapterPosition());
-                    temp.setTime(temp.getTime()+1);
+                    //Order temp = SO.s.orders.get(getAdapterPosition());
+                    if(order.isDone()) {
+                        order.setDoneAs(false);
+                        finished_status.setText(BUTTON_NOT_DONE_TEXT);
+                    } else {
+                        order.setDoneAs(true);
+                        finished_status.setText(BUTTON_DONE_TEXT);
+                    }
 
-                    SO.s.addOrders(new ArrayList<Order>());
+                    //SO.s.addOrders(new ArrayList<Order>());
 
-                            //get(getAdapterPosition()).setTime(order.getTime()+1);
+                    //get(getAdapterPosition()).setTime(order.getTime()+1);
                     // create new identical order
                     //ArrayList<Order> orders = new ArrayList<Order>();
                     //orders.add(order);
