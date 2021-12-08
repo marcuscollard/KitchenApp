@@ -1,4 +1,4 @@
-package java.kitchenapp;
+package Database;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;

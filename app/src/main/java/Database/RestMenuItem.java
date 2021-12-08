@@ -1,4 +1,4 @@
-package java.kitchenapp;
+package Database;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -8,7 +8,6 @@ public interface RestMenuItem {
     @Headers({
             "Accept: application/xml"
     })
-    @GET("se.miun.entities.menuitem")//mac
-    //@GET("se.miun.enities.menuitem")//windows
+    @GET("se.miun.enities.menuitem")
     Call<MenuItems> listNames();
 }
