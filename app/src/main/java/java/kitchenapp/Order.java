@@ -8,6 +8,8 @@ public class Order {
     final private String name;
     private int time;
     private boolean done = false;
+    private String notes = "test test test test test test test test tes" +
+            "t test test test test test test test test test test test test ";
 
     public Order(int tablePrio, String name, int time) {
         this.tablePrio = tablePrio;
@@ -24,6 +26,7 @@ public class Order {
         return time;
     }
     public boolean isDone() {return done;}
+    public String getNotes() {return notes;}
 
     public void setTime(int time) {
         this.time = time;
