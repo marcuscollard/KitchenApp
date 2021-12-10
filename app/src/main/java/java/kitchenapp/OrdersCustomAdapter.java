@@ -113,6 +113,10 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
                     } else {
                         order.setDoneAs(true);
                         finished_status.setText(BUTTON_DONE_TEXT);
+
+                        if(allOrdersDone()) {
+                            Log.d("DB", "skicka bord: " + order.getTablePrio());
+                        }
                     }
                 }
             });
@@ -129,6 +133,19 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
                     Log.d("test", "clicked: " + getAdapterPosition());
                 }
             });
+        }
+        private boolean allOrdersDone() {
+            int tableToSearch = order.getTablePrio();
+
+            for (int i = 0; i < SO.s.orders.size(); i++) {
+                Order o = SO.s.orders.get(i);
+                if(o.getTablePrio() == tableToSearch) {
+                    if(!o.isDone()) {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

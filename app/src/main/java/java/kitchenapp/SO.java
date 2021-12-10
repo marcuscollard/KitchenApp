@@ -12,6 +12,7 @@ public class SO {
     OrdersCustomAdapter customAdapter;
 
     public final SortedList<Order> orders = new SortedList<>(Order.class, new SortedList.Callback<Order>() {
+
         @Override
         public void onInserted(int position, int count) {
             // put x2 if same
