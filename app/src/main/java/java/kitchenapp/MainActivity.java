@@ -10,65 +10,70 @@ import android.os.Handler;
 import java.util.ArrayList;
 
 import Database.XmlReaderTask;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     // database connection...
-
-    //ArrayList<Order> orders;
-
-    void addNew(Order order) {
-        SO.s.orders.add(order);
-    }
+    final int MILLISECONDS_BETWEEN_UPDATES = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // INITIAL HARDCODED TEST ARRAY
+        //ArrayList<Order> test_orders = new ArrayList<Order>(5);
+        //test_orders.add(new Order(1, "fish", 20));
+        //test_orders.add(new Order(3, "potato", 5));
+        //test_orders.add(new Order(5, "salad", 5));
+        //test_orders.add(new Order(3, "McDonald's from next door", 10));
+        //test_orders.add(new Order(2, "chicken sushi", 10));
 
+        //test_orders.get(2).setNotes("testetstsetestestestsetse");
 
-        // FROM HARDCODED TEST ARRAY
-        ArrayList<Order> test_orders = new ArrayList<Order>(5);
-        test_orders.add(new Order(1, "fish", 20));
-        test_orders.add(new Order(3, "potato", 5));
-        test_orders.add(new Order(5, "salad", 5));
-        test_orders.add(new Order(3, "McDonald's from next door", 10));
-        test_orders.add(new Order(2, "chicken sushi", 10));
+        //SO.s.addOrders(test_orders);
 
-        test_orders.get(2).setNotes("testetstsetestestestsetse");
 
         RecyclerView recycler = findViewById(R.id.recycler);
-
-//        SO.s.context = MainActivity.this;
-
 
         SO.s.customAdapter = new OrdersCustomAdapter(MainActivity.this);
         recycler.setAdapter(SO.s.customAdapter);
         recycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        SO.s.addOrders(test_orders);
 
-        // FROM DATABASE
-//        XmlReaderTask xmlReaderTask = new XmlReaderTask();
-//        xmlReaderTask.tableList = null;
-//        xmlReaderTask.handler = new Handler();//Håller  koll på trådsom är ansvar för  nätverk
-//        xmlReaderTask.execute();
+        // Handler is similar to async
 
-        //SO.s.orders.add(new Order(2, "test", 0));
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            int timeStepCounter = 1; // to sort by when the order arrived, assigned as Order.priority
+
+            Random rand = new Random();
+            int testTableNumber;
+
+            @Override
+            public void run() {
+                //FROM DATABASE
+//                XmlReaderTask xmlReaderTask = new XmlReaderTask();
+//                xmlReaderTask.tableList = null;
+//                xmlReaderTask.handler = new Handler();//Håller  koll på trådsom är ansvar för  nätverk
+//                xmlReaderTask.execute();
+
+                //FROM TESTARRAY
+                testTableNumber = rand.nextInt(7) + 1;
+                ArrayList<Order> test_orders = new ArrayList<Order>(5);
+                test_orders.add(new Order(testTableNumber, "fish", 20, timeStepCounter));
+                test_orders.add(new Order(testTableNumber, "McDonald's from next door", 10, timeStepCounter));
+                test_orders.get(1).setNotes("double cheese burger and hold the lettuce");
+                SO.s.addOrders(test_orders);
+
+                timeStepCounter = timeStepCounter+1;
+                handler.postDelayed(this, MILLISECONDS_BETWEEN_UPDATES);
+            }
+        }, MILLISECONDS_BETWEEN_UPDATES);
 
 
-        // Test delete after 5 seconds
-
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                SO.s.orders.clear();
-//            }
-//        }, 5000);
 
     }
-    //TEST
-    // Wofflans wåffeltest
 }

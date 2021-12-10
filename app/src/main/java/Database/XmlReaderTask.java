@@ -91,9 +91,9 @@ public class XmlReaderTask extends AsyncTask<Void, Void, Void> {
             public void run() {
                 ArrayList<Order> array = new ArrayList<Order>();
                 for(int i = 0; i < resturangTable.resturangorderTable.size(); i++){
-                    order = new Order(resturangTable.resturangorderTable.get(i).tablenr,
-                            tableList.menuItemList.get((resturangTable.resturangorderTable.get(i).dishid)-1).foodName,
-                            Integer.valueOf(cookingTable.cookingtimeTable.get((resturangTable.resturangorderTable.get(i).dishid)-1).time));
+//                    order = new Order(resturangTable.resturangorderTable.get(i).tablenr,
+//                            tableList.menuItemList.get((resturangTable.resturangorderTable.get(i).dishid)-1).foodName,
+//                            Integer.valueOf(cookingTable.cookingtimeTable.get((resturangTable.resturangorderTable.get(i).dishid)-1).time));
                     array.add(order);
                 }
                 SO.s.addOrders(array);

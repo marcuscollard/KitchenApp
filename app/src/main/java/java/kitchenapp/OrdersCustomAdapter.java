@@ -22,25 +22,8 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
 
     Context context;
 
-    int mExpandedPosition = -1;
-
     OrdersCustomAdapter(Context context) {
         this.context = context;
-    }
-
-//    public void addAll(ArrayList<Order> orders) {
-//        this.orders.addAll(orders);
-//    }
-//
-//    public int add(Order order) {
-//        return this.orders.add(order);
-//    }
-
-    //  add function `UpDateData` here and call `NotifyDataSetChanged`
-    public void upDateData(ArrayList<Order> orders) {
-        SO.s.orders.addAll(orders);
-        //notifyDataSetChanged();
-        notifyItemRangeInserted(SO.s.orders.size()-orders.size(), SO.s.orders.size());
     }
 
     @NonNull
@@ -54,17 +37,19 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
     @Override
     public void onBindViewHolder(@NonNull OrdersCustomAdapter.MyViewHolder holder, int position) {
         Order order = SO.s.orders.get(position);
-        holder.tableNumber.setText(String.valueOf(order.getTablePrio()));
+        holder.tableNumber.setText(String.valueOf(order.getTableNumber()));
         holder.name.setText(String.valueOf(order.getName()));
         holder.time.setText(String.valueOf(order.getTime()));
         holder.finished_status.setText(holder.BUTTON_NOT_DONE_TEXT);
         holder.order = order;
         holder.notes.setText(order.getNotes());
 
+        // show notes if they exist for order
         final boolean isExpanded = !order.getNotes().equals("");
         holder.notes.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.itemView.setActivated(isExpanded);
 
+        // update button on redraw
         if(order.isDone()) {
             holder.finished_status.setText(holder.BUTTON_DONE_TEXT);
         } else {
@@ -77,6 +62,7 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
         return SO.s.orders.size();
     }
 
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         // constants
@@ -85,23 +71,21 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
 
         // internal variables
         TextView tableNumber, name, time;
-        Button finished_status, view_notes;
+        Button finished_status;
         Order order;
         TextView notes;
 
-
         public MyViewHolder(@NonNull View itemView) {
-
             super(itemView);
+
+            // set internal variables
             tableNumber = itemView.findViewById(R.id.tableNumber);
             name = itemView.findViewById(R.id.name);
             time = itemView.findViewById(R.id.time);
             finished_status = itemView.findViewById(R.id.finished_status);
-
-            view_notes = itemView.findViewById(R.id.viewNotes);
-
             notes = itemView.findViewById(R.id.notes);
 
+            // "DONE" button
             finished_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -115,31 +99,20 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
                         finished_status.setText(BUTTON_DONE_TEXT);
 
                         if(allOrdersDone()) {
-                            Log.d("DB", "skicka bord: " + order.getTablePrio());
+                            Log.d("DB", "skicka bord: " + order.getTableNumber());
                         }
                     }
                 }
             });
-
-            view_notes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    //notes.setHeight(200);
-                    //notes.setHeight(30);
-                    notes.setText("test");
-                    //SO.s.customAdapter.notifyDataSetChanged();
-
-                    Log.d("test", "clicked: " + getAdapterPosition());
-                }
-            });
         }
+
+        // check if all orders for a table are done
         private boolean allOrdersDone() {
-            int tableToSearch = order.getTablePrio();
+            int tableToSearch = order.getTableNumber();
 
             for (int i = 0; i < SO.s.orders.size(); i++) {
                 Order o = SO.s.orders.get(i);
-                if(o.getTablePrio() == tableToSearch) {
+                if(o.getTableNumber() == tableToSearch) {
                     if(!o.isDone()) {
                         return false;
                     }

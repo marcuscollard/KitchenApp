@@ -40,14 +40,14 @@
         android:textSize="23sp"
         />
 
-    <Button
-        android:id="@+id/viewNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:textSize="20sp"
-        />
+<!--    <Button-->
+<!--        android:id="@+id/viewNotes"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:paddingLeft="16dp"-->
+<!--        android:paddingRight="16dp"-->
+<!--        android:textSize="20sp"-->
+<!--        />-->
 
     <Button
         android:id="@+id/finished_status"
