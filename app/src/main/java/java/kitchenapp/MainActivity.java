@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         test_orders.add(new Order(3, "McDonald's from next door", 10));
         test_orders.add(new Order(2, "chicken sushi", 10));
 
+        test_orders.get(2).setNotes("testetstsetestestestsetse");
+
         RecyclerView recycler = findViewById(R.id.recycler);
 
 //        SO.s.context = MainActivity.this;

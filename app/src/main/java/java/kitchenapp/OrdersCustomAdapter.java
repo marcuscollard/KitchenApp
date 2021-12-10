@@ -61,24 +61,15 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
         holder.order = order;
         holder.notes.setText(order.getNotes());
 
-        final boolean isExpanded = position==mExpandedPosition;
+        final boolean isExpanded = !order.getNotes().equals("");
         holder.notes.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.itemView.setActivated(isExpanded);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mExpandedPosition = isExpanded ? -1:position;
-                //TransitionManager.beginDelayedTransition(this);
-                //notifyDataSetChanged();
-                notifyItemChanged(position);
-            }
-        });
+
         if(order.isDone()) {
             holder.finished_status.setText(holder.BUTTON_DONE_TEXT);
         } else {
             holder.finished_status.setText(holder.BUTTON_NOT_DONE_TEXT);
         }
-
     }
 
     @Override
