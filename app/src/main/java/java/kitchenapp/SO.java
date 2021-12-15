@@ -17,22 +17,91 @@ public class SO {
         public void onInserted(int position, int count) {
             // put x2 if same
         }
+
         @Override
         public void onRemoved(int position, int count) {
 
         }
+
         @Override
         public void onMoved(int fromPosition, int toPosition) {
 
         }
+
         @Override
         public int compare(Order o1, Order o2) {
-            if (o1.getPriority() > o2.getPriority()) { return 1; }
-            else if (o1.getPriority() < o2.getPriority()) { return -1; }
-            else {
-                return Integer.compare(o2.getTime(), o1.getTime());
+
+            if (o1.isStarter() && o2.isStarter())
+            {
+                if (o1.getPriority() > o2.getPriority())
+                {
+                    return 1;
+                }
+                else if (o1.getPriority() < o2.getPriority())
+                {
+                    return -1;
+                }
+                else
+                    {
+                    if (o1.getTime() < o2.getTime()) {
+                        System.out.println("O1!");
+                        return 1;
+                    } else if (o1.getTime() > o2.getTime()) {
+                        System.out.println("O2");
+                        return -1;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+            } else if (o1.isStarter() && o2.isStarter() == false)
+            {
+                return -1;
             }
+            else if (o1.isStarter() == false && o2.isStarter())
+            {
+                return 1;
+            }
+            else if (o1.getPriority() < o2.getPriority())
+            {
+                return -1;
+            }
+            else if (o1.getPriority() > o2.getPriority())
+            {
+                return 1;
+            }
+            else if (o1.getTime() < o2.getTime())
+            {
+                System.out.println("O1!");
+                return 1;
+            }
+            else if (o1.getTime() > o2.getTime())
+            {
+                System.out.println("O2");
+                return -1;
+            }
+            else
+            {
+                return 0;
+            }
+            //return Integer.compare(o2.getTime(), o1.getTime());
+
+
+
+            /*if (o1.getPriority() > o2.getPriority())
+            {
+            return 1;
+            }
+            else if (o1.getPriority() < o2.getPriority())
+            {
+            return -1;
+            }
+            else
+            {
+                return Integer.compare(o2.getTime(), o1.getTime());
+            }*/
         }
+
         @Override
         public void onChanged(int position, int count) {
 

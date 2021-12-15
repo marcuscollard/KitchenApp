@@ -15,7 +15,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     // database connection...
-    final int MILLISECONDS_BETWEEN_UPDATES = 3000;
+    final int MILLISECONDS_BETWEEN_UPDATES = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +61,21 @@ public class MainActivity extends AppCompatActivity {
 //                xmlReaderTask.execute();
 
                 //FROM TESTARRAY
-                testTableNumber = rand.nextInt(7) + 1;
-                ArrayList<Order> test_orders = new ArrayList<Order>(5);
-                test_orders.add(new Order(testTableNumber, "fish", 20, timeStepCounter));
-                test_orders.add(new Order(testTableNumber, "McDonald's from next door", 10, timeStepCounter));
-                test_orders.get(1).setNotes("double cheese burger and hold the lettuce");
-                SO.s.addOrders(test_orders);
+                if(SO.s.orders.size() < 10) {
+                    testTableNumber = rand.nextInt(7) + 1;
+                    ArrayList<Order> test_orders = new ArrayList<Order>(5);
+                    test_orders.add(new Order(testTableNumber, "McDonald's from next door", 20, timeStepCounter, false));
+                    test_orders.add(new Order(testTableNumber, "fish", 10, timeStepCounter, true));
+                    test_orders.add(new Order(testTableNumber, "Gött mos", 20, timeStepCounter, true));
+                    test_orders.add(new Order(testTableNumber, "Wok med kyckling", 20, timeStepCounter, false));
+                    test_orders.add(new Order(testTableNumber, "Surströmming", 10, timeStepCounter, false));
+                    test_orders.add(new Order(testTableNumber, "Köttbullar", 1, timeStepCounter, false));
+                    test_orders.add(new Order(testTableNumber, "Toast skagen", 2, timeStepCounter, true));
 
+
+                    test_orders.get(1).setNotes("double cheese burger and hold the lettuce");
+                    SO.s.addOrders(test_orders);
+                }
                 timeStepCounter = timeStepCounter+1;
                 handler.postDelayed(this, MILLISECONDS_BETWEEN_UPDATES);
             }

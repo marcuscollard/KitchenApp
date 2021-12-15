@@ -1,12 +1,14 @@
 package java.kitchenapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -55,6 +57,10 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
         } else {
             holder.finished_status.setText(holder.BUTTON_NOT_DONE_TEXT);
         }
+        if(order.isStarter())
+        {
+            holder.layout.setBackgroundColor(0xFF00FF00);
+        }
     }
 
     @Override
@@ -74,6 +80,7 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
         Button finished_status;
         Order order;
         TextView notes;
+        LinearLayout layout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +90,7 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
             name = itemView.findViewById(R.id.name);
             time = itemView.findViewById(R.id.time);
             finished_status = itemView.findViewById(R.id.finished_status);
+            layout = itemView.findViewById(R.id.orderLinearLayout);
             notes = itemView.findViewById(R.id.notes);
 
             // "DONE" button
