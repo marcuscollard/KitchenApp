@@ -30,6 +30,9 @@ public class SO {
 
         @Override
         public int compare(Order o1, Order o2) {
+            Long obj1 = new Long(o1.getPriority());
+            Long obj2 = new Long(o2.getPriority());
+            int compareValue = obj1.compareTo(obj2);
 
             if (o1.isStarter() && o2.isStarter())
             {
@@ -62,7 +65,7 @@ public class SO {
             {
                 return 1;
             }
-            else if (o1.getPriority() < o2.getPriority())
+            else if (compareValue < 0)
             {
                 return -1;
             }
@@ -116,6 +119,8 @@ public class SO {
         }
     });
 
+    public SortedList<Order> getOrders(){return orders;}
+
     public void addOrders(ArrayList<Order> o) {
         orders.addAll(o);
         customAdapter.notifyDataSetChanged();
@@ -123,10 +128,11 @@ public class SO {
         //customAdapter.upDateData(orders);
     }
 
-    public void addOrder() {
-        //orders.addAll(orders);
+    public void addOrder(Order o) {
+        orders.add(o);
         customAdapter.notifyDataSetChanged();
     }
+
 
 //    SortedList<Order> deleteOrder() {
 //

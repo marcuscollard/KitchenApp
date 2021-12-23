@@ -10,4 +10,6 @@ public class MenuItem {
     Integer id;
     @Element(name="price")
     Integer price;
+    @Element(name="foodtype")
+    String foodtype;
 }

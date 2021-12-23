@@ -4,10 +4,13 @@ import android.os.AsyncTask;
 import android.os.Handler;
 
 
+import androidx.recyclerview.widget.SortedList;
+
 import java.io.IOException;
 import java.kitchenapp.Order;
 import java.kitchenapp.SO;
 import java.util.ArrayList;
+import java.util.Random;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -17,65 +20,28 @@ import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class XmlReaderTask extends AsyncTask<Void, Void, Void> {
-    Order order;
-    Order order2;
-    public MenuItems tableList = new MenuItems();
-    public Cookingtimes cookingTable = new Cookingtimes();
-    public Resturangorders resturangTable = new Resturangorders();
-    //String responseText;
+    public Kitchenapp2s tableList = new Kitchenapp2s();
     public Handler handler;
+    final int MILLISECONDS_BETWEEN_UPDATES = 1000;
+    ArrayList<Order> array = new ArrayList<Order>();
     protected Void doInBackground(Void... voids) {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        //logging.level(HttpLoggingInterceptor.Level.BODY);   // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);  // <-- this is the important line!
 
-        Retrofit retrofitMenuItem = new Retrofit.Builder()//http://localhost:8080/Anton2/webresources/se.miun.entities.menuitem
+        Retrofit retrofitView = new Retrofit.Builder()//http://localhost:8080/Anton2/webresources/se.miun.entities.menuitem
                 .baseUrl("http://10.0.2.2:8080/Anton2/webresources/")//http://10.0.2.2:8080/WebbTest2/webresources/    http://localhost:8080/WebbTest2/webresources/se.miun.register
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .client(httpClient.build())
                 .build();
-        RestMenuItem service = retrofitMenuItem.create(RestMenuItem.class);
-        Call<MenuItems> listName = service.listNames();
+        RestViewKitchen service = retrofitView.create(RestViewKitchen.class);
+        Call<Kitchenapp2s> listKitchen = service.listKitchen();
         try {
 
-            Response<MenuItems> result = listName.execute();
+            Response<Kitchenapp2s> result = listKitchen.execute();
             tableList = result.body();
-
-            //responseText = tableList.bordorder.get(0).foodname;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Retrofit retrofitCooking = new Retrofit.Builder()//http://localhost:8080/Anton2/webresources/se.miun.entities.menuitem
-                .baseUrl("http://10.0.2.2:8080/Anton2/webresources/")//http://10.0.2.2:8080/WebbTest2/webresources/    http://localhost:8080/WebbTest2/webresources/se.miun.register
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-        RestCookingtime serviceCooking = retrofitCooking.create(RestCookingtime.class);
-        Call<Cookingtimes> listCooking = serviceCooking.listCooking();
-        try {
-
-            Response<Cookingtimes> result = listCooking.execute();
-            cookingTable = result.body();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Retrofit retrofitResturang = new Retrofit.Builder()//http://localhost:8080/Anton2/webresources/se.miun.entities.menuitem
-                .baseUrl("http://10.0.2.2:8080/Anton2/webresources/")//http://10.0.2.2:8080/WebbTest2/webresources/    http://localhost:8080/WebbTest2/webresources/se.miun.register
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-        RestResturang serviceResturang = retrofitResturang.create(RestResturang.class);
-        Call<Resturangorders> listResturang = serviceResturang.listResturang();
-        try {
-
-            Response<Resturangorders> result = listResturang.execute();
-            resturangTable = result.body();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,21 +51,77 @@ public class XmlReaderTask extends AsyncTask<Void, Void, Void> {
         return null;
 
     }
+
     protected void onPostExecute(Void result) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                ArrayList<Order> array = new ArrayList<Order>();
-                for(int i = 0; i < resturangTable.resturangorderTable.size(); i++){
-//                    order = new Order(resturangTable.resturangorderTable.get(i).tablenr,
-//                            tableList.menuItemList.get((resturangTable.resturangorderTable.get(i).dishid)-1).foodName,
-//                            Integer.valueOf(cookingTable.cookingtimeTable.get((resturangTable.resturangorderTable.get(i).dishid)-1).time));
-                    array.add(order);
+                SortedList<Order> items = SO.s.getOrders();
+                boolean done = false;
+                boolean isNew = true;
+                for(int i = 0; i < tableList.kitchenTable.size(); i++){//loopar igenom databas
+                    if(Integer.valueOf(tableList.kitchenTable.get(i).foodtype) == 2)//color
+                        done = true;
+                    for(int j = 0; j < items.size() && isNew == true; j++){//loopar igenom befintilg
+                        if(items.get(j).getId() == tableList.kitchenTable.get(i).id){
+                            isNew = false;
+                        }
+                    }
+                    if(isNew) {
+                        int id = tableList.kitchenTable.get(i).id;
+                        if(id != 1){
+                            int tableNr = tableList.kitchenTable.get(i).tablenr;
+                            String foodName = tableList.kitchenTable.get(i).foodname;
+                            int time = tableList.kitchenTable.get(i).time;
+                            String timeStampS = tableList.kitchenTable.get(i).timestamp;
+                            Long timeStamp = Long.parseLong(tableList.kitchenTable.get(i).timestamp);
+                            SO.s.addOrder(new Order(tableNr, foodName, time, timeStamp, done, id));
+                        }
+                    }
+                    isNew = true;
+                    done = false;
                 }
-                SO.s.addOrders(array);
             }
         });
 
 
     }
+
+    /*protected void onPostExecute(Void result) {
+        //Problemet är att tableList inte uppdateras
+        Handler handler2 = new Handler();
+        handler2.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        SortedList<Order> items = SO.s.getOrders();
+                        boolean done = false;
+                        boolean isNew = true;
+                        for(int i = 0; i < tableList.kitchenTable.size(); i++){
+                            if(Integer.valueOf(tableList.kitchenTable.get(i).foodtype) == 2)
+                                done = true;
+                            for(int j = 0; j < items.size(); j++){
+                                if(items.get(j).getPriority() == (int) Long.parseLong(tableList.kitchenTable.get(i).timestamp)){
+                                    isNew = false;
+                                }
+                            }
+                            if(isNew) {
+                                SO.s.addOrder(new Order(tableList.kitchenTable.get(i).tablenr,
+                                        tableList.kitchenTable.get(i).foodname, tableList.kitchenTable.get(i).time,
+                                        (int) Long.parseLong(tableList.kitchenTable.get(i).timestamp), done));
+                            }
+                            isNew = true;
+                            done = false;
+                        }
+
+                    }
+                });
+                handler2.postDelayed(this, MILLISECONDS_BETWEEN_UPDATES);
+            }
+        }, MILLISECONDS_BETWEEN_UPDATES);
+    }*/
 }
