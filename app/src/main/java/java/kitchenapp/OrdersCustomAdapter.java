@@ -2,6 +2,7 @@ package java.kitchenapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 //import androidx.recyclerview.widget.SortedList;
 
 import java.util.ArrayList;
+
+import Database.Kitchenorder;
+import Database.RetrofitPutKitchen;
 
 
 // fills Recycler view with myViewHolders(which is the model of order_row_layout)
@@ -105,7 +109,16 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
                     } else {
                         order.setDoneAs(true);
                         finished_status.setText(BUTTON_DONE_TEXT);
-
+                        Kitchenorder kitchenorder = new Kitchenorder();
+                        kitchenorder.setDone(true);
+                        kitchenorder.setDelivered(false);
+                        kitchenorder.setId(order.getKitchenid());
+                        kitchenorder.setOrderid(order.getId());
+                        RetrofitPutKitchen retrofitPutKitchen = new RetrofitPutKitchen();
+                        retrofitPutKitchen.kitchenUpdate = null;
+                        retrofitPutKitchen.kitchenUpdate = kitchenorder;
+                        retrofitPutKitchen.handler = new Handler();
+                        retrofitPutKitchen.execute();
                         if(allOrdersDone()) {
                             Log.d("DB", "skicka bord: " + order.getTableNumber());
                         }

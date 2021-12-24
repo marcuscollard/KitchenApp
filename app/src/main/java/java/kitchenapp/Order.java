@@ -11,6 +11,16 @@ public class Order {
     final private String name;
     private int id;
 
+    public int getKitchenid() {
+        return kitchenid;
+    }
+
+    public void setKitchenid(int kitchenid) {
+        this.kitchenid = kitchenid;
+    }
+
+    private int kitchenid;
+
     public int getId() {
         return id;
     }
@@ -24,13 +34,14 @@ public class Order {
     private String notes = "";
     private boolean starter = false;
 
-    public Order(int tableNumber, String name, int time, Long priority, boolean starter, int id) {
+    public Order(int tableNumber, String name, int time, Long priority, boolean starter, int id, int kitchenid) {
         this.tableNumber = tableNumber;
         this.name = name;
         this.time = time;
         this.priority = priority;
         this.starter = starter;
         this.id = id;
+        this.kitchenid = kitchenid;
     }
     public int getTableNumber() {
         return tableNumber;

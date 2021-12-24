@@ -57,11 +57,11 @@ public class XmlReaderTask extends AsyncTask<Void, Void, Void> {
             @Override
             public void run() {
                 SortedList<Order> items = SO.s.getOrders();
-                boolean done = false;
+                boolean color = false;
                 boolean isNew = true;
                 for(int i = 0; i < tableList.kitchenTable.size(); i++){//loopar igenom databas
                     if(Integer.valueOf(tableList.kitchenTable.get(i).foodtype) == 2)//color
-                        done = true;
+                        color = true;
                     for(int j = 0; j < items.size() && isNew == true; j++){//loopar igenom befintilg
                         if(items.get(j).getId() == tableList.kitchenTable.get(i).id){
                             isNew = false;
@@ -75,11 +75,12 @@ public class XmlReaderTask extends AsyncTask<Void, Void, Void> {
                             int time = tableList.kitchenTable.get(i).time;
                             String timeStampS = tableList.kitchenTable.get(i).timestamp;
                             Long timeStamp = Long.parseLong(tableList.kitchenTable.get(i).timestamp);
-                            SO.s.addOrder(new Order(tableNr, foodName, time, timeStamp, done, id));
+                            int kitchenid = tableList.kitchenTable.get(i).kitchenid;
+                            SO.s.addOrder(new Order(tableNr, foodName, time, timeStamp, color, id, kitchenid));
                         }
                     }
                     isNew = true;
-                    done = false;
+                    color = false;
                 }
             }
         });

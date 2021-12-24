@@ -3,6 +3,7 @@ package java.kitchenapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SortedList;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         recycler.setAdapter(SO.s.customAdapter);
         recycler.setLayoutManager(new LinearLayoutManager(MainActivity.this));
 
-        Kitchenapp2s tableList = new Kitchenapp2s();
+        SortedList<Order> items = SO.s.getOrders();
+
         Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
             @Override
