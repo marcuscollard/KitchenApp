@@ -8,5 +8,5 @@ import java.util.List;
 @Root(name="kitchenapp2s")
 public class Kitchenapp2s {
     @ElementList(name="kitchenapp2", inline = true)
-    public List<Kitchenapp2> kitchenTable;
+    public List<Kitchenapp2> viewTable;
 }

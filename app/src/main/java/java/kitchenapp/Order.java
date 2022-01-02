@@ -30,11 +30,11 @@ public class Order {
     }
 
     private int time;
-    private boolean done = false;
+    private boolean done;
     private String notes = "";
     private boolean starter = false;
 
-    public Order(int tableNumber, String name, int time, Long priority, boolean starter, int id, int kitchenid) {
+    public Order(int tableNumber, String name, int time, Long priority, boolean starter, int id, int kitchenid, boolean done) {
         this.tableNumber = tableNumber;
         this.name = name;
         this.time = time;
@@ -42,6 +42,9 @@ public class Order {
         this.starter = starter;
         this.id = id;
         this.kitchenid = kitchenid;
+        this.done = done;
+        //this.notes = notes;
+
     }
     public int getTableNumber() {
         return tableNumber;

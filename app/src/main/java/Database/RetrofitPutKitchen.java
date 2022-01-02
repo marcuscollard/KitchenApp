@@ -26,8 +26,8 @@ public class RetrofitPutKitchen extends AsyncTask<Void, Void, Kitchenorder> {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(httpClient.build())
                 .build();
-        PutKitchen service = retrofit.create(PutKitchen.class);
-        Call<Kitchenorder> call = service.updateUser(kitchenUpdate.getId(), kitchenUpdate);
+        Api service = retrofit.create(Api.class);
+        Call<Kitchenorder> call = service.updateKitchen(kitchenUpdate.getId(), kitchenUpdate);
         call.enqueue(new Callback<Kitchenorder>() {
             @Override
             public void onResponse(Call<Kitchenorder> call, Response<Kitchenorder> response) {

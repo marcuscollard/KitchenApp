@@ -133,6 +133,14 @@ public class SO {
         customAdapter.notifyDataSetChanged();
     }
 
+    public void removeOrder(int pos) {
+        // när det finns 0 kvar, kallar vi för att radera från SF
+        //if(pos < 0)
+            //return;
+        orders.removeItemAt(pos);
+        customAdapter.notifyItemRemoved(pos);
+    }
+
 
 //    SortedList<Order> deleteOrder() {
 //

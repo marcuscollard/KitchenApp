@@ -7,18 +7,17 @@ import androidx.recyclerview.widget.SortedList;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 
-import java.util.ArrayList;
-
-import Database.Kitchenapp2s;
-import Database.XmlReaderTask;
-import java.util.Random;
+import Database.RetrofitGet;
 
 public class MainActivity extends AppCompatActivity {
 
     // database connection...
     final int MILLISECONDS_BETWEEN_UPDATES = 1000;
-
+    public static Handler handler2 = new Handler();
+    public static RetrofitGet retrofitGet = new RetrofitGet();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         //SO.s.addOrders(test_orders);
 
-
+        //Button refreshButton = findViewById(R.id.refreshButton);
         RecyclerView recycler = findViewById(R.id.recycler);
 
         SO.s.customAdapter = new OrdersCustomAdapter(MainActivity.this);
@@ -45,15 +44,25 @@ public class MainActivity extends AppCompatActivity {
 
         SortedList<Order> items = SO.s.getOrders();
 
-        Handler handler2 = new Handler();
+        /*refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                retrofitGet = new RetrofitGet();
+                retrofitGet.viewList = null;
+                retrofitGet.kitchenList = null;
+                retrofitGet.handler = new Handler();
+                retrofitGet.execute();
+            }
+        });*/
+
         handler2.postDelayed(new Runnable() {
             @Override
             public void run() {
-                XmlReaderTask xmlReaderTask = new XmlReaderTask();
-                xmlReaderTask.tableList = null;
-                xmlReaderTask.handler = new Handler();//Håller  koll på trådsom är ansvar för  nätverk
-                xmlReaderTask.execute();
-
+                retrofitGet = new RetrofitGet();
+                retrofitGet.viewList = null;
+                retrofitGet.kitchenList = null;
+                retrofitGet.handler = new Handler();
+                retrofitGet.execute();
                 handler2.postDelayed(this, MILLISECONDS_BETWEEN_UPDATES);
             }
         }, MILLISECONDS_BETWEEN_UPDATES);

@@ -1,10 +1,7 @@
 package java.kitchenapp;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
-import android.transition.TransitionManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 //import androidx.recyclerview.widget.SortedList;
-
-import java.util.ArrayList;
 
 import Database.Kitchenorder;
 import Database.RetrofitPutKitchen;
@@ -101,11 +96,20 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
             finished_status.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     //Order temp = SO.s.orders.get(getAdapterPosition());
                     if(order.isDone()) {
                         order.setDoneAs(false);
                         finished_status.setText(BUTTON_NOT_DONE_TEXT);
+                        Kitchenorder kitchenorder = new Kitchenorder();
+                        kitchenorder.setDone(false);
+                        kitchenorder.setDelivered(false);
+                        kitchenorder.setId(order.getKitchenid());
+                        kitchenorder.setOrderid(order.getId());
+                        RetrofitPutKitchen retrofitPutKitchen = new RetrofitPutKitchen();
+                        retrofitPutKitchen.kitchenUpdate = null;
+                        retrofitPutKitchen.kitchenUpdate = kitchenorder;
+                        retrofitPutKitchen.handler = new Handler();
+                        retrofitPutKitchen.execute();
                     } else {
                         order.setDoneAs(true);
                         finished_status.setText(BUTTON_DONE_TEXT);
@@ -119,9 +123,12 @@ public class OrdersCustomAdapter extends RecyclerView.Adapter<OrdersCustomAdapte
                         retrofitPutKitchen.kitchenUpdate = kitchenorder;
                         retrofitPutKitchen.handler = new Handler();
                         retrofitPutKitchen.execute();
-                        if(allOrdersDone()) {
+
+
+                        SO.s.removeOrder(getAdapterPosition());
+                        /*if(allOrdersDone()) {
                             Log.d("DB", "skicka bord: " + order.getTableNumber());
-                        }
+                        }*/
                     }
                 }
             });

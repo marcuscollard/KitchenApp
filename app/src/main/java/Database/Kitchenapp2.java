@@ -8,4 +8,7 @@ public class Kitchenapp2 {
     public int tablenr;
     public int time;
     public String timestamp;
+    public boolean done;
+    public String notes;
+    public boolean delivered;
 }
