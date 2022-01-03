@@ -100,19 +100,29 @@ public class RetrofitGet extends AsyncTask<Void, Void, Void> {
                                 if(kitchenList.get(i).getId()==viewList.viewTable.get(j).kitchenid){
                                     if(Integer.valueOf(viewList.viewTable.get(j).foodtype) == 2)//color
                                         color = true;
-                                    int tableNr = viewList.viewTable.get(j).tablenr;
-                                    String foodName = viewList.viewTable.get(j).foodname;
-                                    int time = viewList.viewTable.get(j).time;
-                                    Long timeStamp = Long.parseLong(viewList.viewTable.get(j).timestamp);
-                                    int kitchenid = viewList.viewTable.get(j).kitchenid;
-                                    boolean done = kitchenList.get(i).isDone();
-                                    String notes = viewList.viewTable.get(j).notes;
+
+                                    boolean exist = false;
                                     int id = viewList.viewTable.get(j).id;
-                                    Order order = new Order(tableNr, foodName, time, timeStamp, color, id, kitchenid, done);
-                                    if(notes != null){
-                                        order.setNotes(notes);
+                                    for(int k = 0;k < items.size(); k++){
+                                        int localOrderId = items.get(k).getId();
+                                        if(id == localOrderId)
+                                            exist = true;
                                     }
-                                    SO.s.addOrder(order);
+                                    if(!exist){
+                                        int tableNr = viewList.viewTable.get(j).tablenr;
+                                        String foodName = viewList.viewTable.get(j).foodname;
+                                        int time = viewList.viewTable.get(j).time;
+                                        Long timeStamp = Long.parseLong(viewList.viewTable.get(j).timestamp);
+                                        int kitchenid = viewList.viewTable.get(j).kitchenid;
+                                        boolean done = kitchenList.get(i).isDone();
+                                        String notes = viewList.viewTable.get(j).notes;
+
+                                        Order order = new Order(tableNr, foodName, time, timeStamp, color, id, kitchenid, done);
+                                        if(notes != null){
+                                            order.setNotes(notes);
+                                        }
+                                        SO.s.addOrder(order);
+                                    }
                                     color = false;
                                 }
                             }
