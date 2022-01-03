@@ -73,6 +73,9 @@ public class RetrofitGet extends AsyncTask<Void, Void, Void> {
         handler.post(new Runnable() {
             @Override
             public void run() {
+                /*Behandling av inkommande data från databasen*/
+                //Steg 1: kolla om det finns en nyare tidssämpel i databasen än den lokala listan
+                //Detta för att kolla om det finns ny data redo för hämtning
                 Long localTime = Long.parseLong("0");
                 Long databaseTime;
 
@@ -91,16 +94,26 @@ public class RetrofitGet extends AsyncTask<Void, Void, Void> {
                 }
 
                 if(databaseTime > localTime){
-                    boolean color = false;
-
+                    //Steg 2: Om det finns ny data att hämta...
+                    boolean color = false; //reset på variablen color
 
                     for(int i = 0; i < kitchenList.size(); i++){
+                        //Om indexet i är vid ett värde som: Inte done && är inte dummy data (id=1)
                         if(!kitchenList.get(i).isDone() && kitchenList.get(i).getId() != 1){
+                            //viewList är en view av databasen har samma antal värden som kitchenLists
+                            //(en del av view kommer från kitchen)
+                            //Men view och kitchen är inte i samma ordning
+                            //loop j letar efter motsvarande viewList från kitchenList
                             for(int j = 0; j < viewList.viewTable.size(); j++){
                                 if(kitchenList.get(i).getId()==viewList.viewTable.get(j).kitchenid){
+                                    //Om vi hittar den motsvarande
+
+                                    //ändrar färg på objektet enligt typ av mat
                                     if(Integer.valueOf(viewList.viewTable.get(j).foodtype) == 2)//color
                                         color = true;
 
+                                    //Kollar om det kommande objektet från databasen finns i den
+                                    // lokala listan
                                     boolean exist = false;
                                     int id = viewList.viewTable.get(j).id;
                                     for(int k = 0;k < items.size(); k++){
@@ -108,7 +121,7 @@ public class RetrofitGet extends AsyncTask<Void, Void, Void> {
                                         if(id == localOrderId)
                                             exist = true;
                                     }
-                                    if(!exist){
+                                    if(!exist){//Om nya objektet inte finns lokalt
                                         int tableNr = viewList.viewTable.get(j).tablenr;
                                         String foodName = viewList.viewTable.get(j).foodname;
                                         int time = viewList.viewTable.get(j).time;
@@ -123,7 +136,7 @@ public class RetrofitGet extends AsyncTask<Void, Void, Void> {
                                         }
                                         SO.s.addOrder(order);
                                     }
-                                    color = false;
+                                    color = false; //reset på variablen color
                                 }
                             }
                         }
